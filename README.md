@@ -97,17 +97,42 @@ dans l'eau sont confrontées au masque de segmentation du J1.
   table de mots-clés, qui couvre les cas courants mais pas tout le vocabulaire.
 - Une photo a été retirée du jeu de test (`eau_verte_00.jpg`) : image satellite
   récupérée par erreur lors de la collecte Wikimedia.
+## État d'avancement — Jour 4
 
+Modèle vision-langage **Qwen2.5-VL-3B-Instruct** (sans entraînement) pour
+pré-remplir le formulaire d'observation et arbitrer les cas ambigus
+(écume de pollution ou eau vive naturelle, présence d'un animal mort).
+
+- 16 champs du formulaire pré-remplis par l'IA, 7 laissés au citoyen
+  (mesures physiques, ressenti personnel…)
+- Si l'IA n'est pas sûre, elle répond NOT_SURE au lieu d'inventer
+- Aucune alerte « animal mort » sans validation humaine
+
+**Résultats sur le jeu de test (19 photos)**
+
+- 15 fiches produites, 0 erreur ; 4 photos refusées au contrôle qualité
+- Taux de pré-remplissage moyen : 64 % ; taux d'abstention : 35 %
+- Précision (évaluation manuelle sur un échantillon de 8 photos,
+  15 réponses notées) : 86,7 %
+  - réponses du modèle vision-langage : 100 %
+  - réponses des règles de traitement d'image : 67 %
+- Temps de traitement : environ 40 s par photo sur GPU T4
+
+**Limites identifiées**
+
+- Faux positifs « animal mort » sur des photos de déchets flottants
+  (bouteilles prises pour des animaux) : la validation humaine empêche
+  toute fausse alerte, mais le prompt doit être renforcé
+- La règle de turbidité ne détecte pas l'eau boueuse
+- Échantillon d'évaluation encore trop petit pour des conclusions solides## 
 ## Suite prévue
 
-- **J4** : modèle vision-langage pour arbitrer les cas ambigus (écume ou mousse,
-  poisson mort ou débris) et pré-remplir le formulaire d'observation
-- **J5** : croisement avec Open-Meteo et Hub'Eau, score de risque
-  humains/animaux, prédiction à 3 jours
-- **J6** : évaluation globale et réglage final des seuils
-- **Interface** : application mobile de capture guidée, tableau de bord
+- **J5** : croisement avec Open-Meteo et Hub'Eau, score de risque humains/animaux,
+  prédiction à 3 jours
+- **J6** : évaluation globale et réglage final des seuils ; correction des faux
+  positifs « animal mort » et de la règle de turbidité
+- **Interface** : application mobile de capture guidée et tableau de bord
   gestionnaire avec file de validation des alertes
-
 ## Données
 
 - Photos de test : Wikimedia Commons (voir `credits_photos.csv`)
