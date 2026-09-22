@@ -124,11 +124,43 @@ pré-remplir le formulaire d'observation et arbitrer les cas ambigus
   (bouteilles prises pour des animaux) : la validation humaine empêche
   toute fausse alerte, mais le prompt doit être renforcé
 - La règle de turbidité ne détecte pas l'eau boueuse
-- Échantillon d'évaluation encore trop petit pour des conclusions solides## 
-## Suite prévue
+- Échantillon d'évaluation encore trop petit pour des conclusions solides##
 
-- **J5** : croisement avec Open-Meteo et Hub'Eau, score de risque humains/animaux,
-  prédiction à 3 jours
+## Jour 5 — Contexte et score de risque
+
+La photo seule ne suffit pas : une eau claire peut être dangereuse après un orage.
+Le J5 croise la fiche du J4 avec deux sources publiques, sans clé API :
+
+- **Open-Meteo** : pluie des 72 dernières heures, pluie prévue à 3 jours, température
+- **Hub'Eau (hydrométrie)** : débit à la station la plus proche, comparé à la
+  médiane des 30 derniers jours (crue ou étiage)
+
+**Score de risque explicable** : chaque signal (mousse, couleur anormale, rejet
+d'eaux usées, déchets, animal mort, pluie, chaleur, débit) ajoute des points
+avec une raison lisible. Deux scores distincts :
+
+- **Humains** : sensibles au courant et aux crues
+- **Animaux** : sensibles aux cyanobactéries (eau colorée + chaleur) et à l'étiage
+
+Niveaux FAIBLE / MODÉRÉ / ÉLEVÉ, chacun avec une consigne de sécurité.
+Tout niveau ÉLEVÉ part dans la file de validation du gestionnaire :
+**aucune alerte n'est envoyée sans validation humaine.**
+
+**Résultats** (15 fiches, Seine à Paris, station Austerlitz à 1,6 km) :
+
+| Scénario | Humains FAIBLE | MODÉRÉ | ÉLEVÉ |
+|---|---|---|---|
+| Conditions réelles (temps sec, débit normal) | 8 | 4 | 3 |
+| Crue simulée (débit ×3,1) | 0 | 8 | 7 |
+
+Le score réagit bien au contexte : après 25 mm de pluie, même une berge propre
+passe en MODÉRÉ, conformément aux recommandations sanitaires après orage.
+
+**Limites** : seuils fixés à dire d'expert, non calibrés ; Hub'Eau ne couvre que
+la France ; le score hérite des erreurs du J4 (mousse jamais détectée, turbidité
+sous-estimée, faux positifs « animal mort »), corrigées au J6.
+
+## Suite prévue
 - **J6** : évaluation globale et réglage final des seuils ; correction des faux
   positifs « animal mort » et de la règle de turbidité
 - **Interface** : application mobile de capture guidée et tableau de bord
