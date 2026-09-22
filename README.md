@@ -161,8 +161,8 @@ la France ; le score hérite des erreurs du J4 (mousse jamais détectée, turbid
 sous-estimée, faux positifs « animal mort »), corrigées au J6.
 
 ## Suite prévue
-- **J6** : évaluation globale et réglage final des seuils ; correction des faux
-  positifs « animal mort » et de la règle de turbidité
+- **J6** : évaluation globale, réglage final des seuils et correction des erreurs
+  du J4 remontées par le score de risque
 - **Interface** : application mobile de capture guidée et tableau de bord
   gestionnaire avec file de validation des alertes
 ## Données
