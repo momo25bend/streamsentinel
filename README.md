@@ -162,7 +162,37 @@ sous-estimée, faux positifs « animal mort »), corrigées au J6.
 
 ## Suite prévue
 - **J6** : évaluation globale, réglage final des seuils et correction des erreurs
-  du J4 remontées par le score de risque
+  ## État d'avancement — Jour 6
+
+Réglage des seuils et correction des défauts relevés au J4.
+
+**Corrections apportées**
+
+- **Prompt de détection d'animal mort reformulé.** La première version listait
+  les objets à ne pas confondre (bouteilles, sacs…) ; elle a dégradé les
+  résultats, en faisant passer les faux positifs de 3 à 5. La version retenue
+  demande au contraire d'identifier des signes positifs (tête, œil, nageoires,
+  écailles, plumes, pelage) : les faux positifs tombent à 1 sur 19 photos.
+- **Seuils de turbidité resserrés** (MUDDY au-dessus de 0,35, CLEAR en dessous
+  de 0,30, au lieu de 0,5 et 0,25) : la zone d'abstention passe de 0,25 à 0,10.
+  Les photos d'eau boueuse mesuraient 0,41 et 0,54 et n'étaient plus classées.
+- **Lecture des réponses corrigée** : un NOT_SURE du modèle vision-langage
+  était signalé comme « réponse hors options », ce qui laissait croire à une
+  erreur ; sa justification est désormais conservée.
+
+**Résultats finaux (19 photos, 15 fiches produites, 0 erreur)**
+
+- Taux de pré-remplissage moyen : 65 %
+- Évaluations : 6 MODERATE, 5 POOR, 4 GOOD
+- Faux positifs « animal mort » : 1 (contre 3 avant correction)
+- Temps de traitement : environ 35 s par photo sur GPU T4
+
+**Enseignement**
+
+Sur un modèle vision-langage de 3 milliards de paramètres, une consigne
+négative (« ceci n'est pas un animal ») dégrade les résultats : le modèle
+se focalise sur les objets cités. Une consigne positive, fondée sur des
+signes anatomiques observables, est nettement plus fiable.
 - **Interface** : application mobile de capture guidée et tableau de bord
   gestionnaire avec file de validation des alertes
 ## Données
